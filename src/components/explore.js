@@ -1,11 +1,41 @@
-import { Autocomplete, Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogTitle, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import axios from "axios";
+import { useState } from "react";
+import axios from 'axios';
 import PokeCard from "./pokeCard";
 
 export default function Explore({ pokemon }) {
     const theme=useTheme();
     const smallScreen=useMediaQuery('(max-width: 650px');
+
+    const [name, setName]=useState("");
+    const [pokeData, setPokeData]=useState(pokemon);
+
+    const handleSearch=async () => {
+        if (name === "")return
+        try {
+            const { data }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            setPokeData(data);
+            setName("");
+        } catch (error) {
+            handleClickOpen();
+        }
+    }
+
+    const handleChange=(event) => {
+        setName(event.target.value);
+    };
+
+    const [open, setOpen]=useState(false);
+
+    const handleClickOpen=() => {
+        setOpen(true);
+    };
+
+    const handleClose=() => {
+        setOpen(false);
+        setName("");
+    };
 
     // const pokemon={
     //     name: "Charmander",
@@ -64,9 +94,61 @@ export default function Explore({ pokemon }) {
                 Explore
             </Typography>
 
-            {/* <Autocomplete /> */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    m: theme.spacing(3, 1)
+                }}
+            >
+                <TextField
+                    value={name}
+                    onChange={handleChange}
+                    variant="filled"
+                    label="Pokemon Name"
+                    sx={{
+                        backgroundColor: theme.palette.background.default
+                    }}
+                />
 
-            <PokeCard pokemon={pokemon} />
+                <Button variant="contained"
+                    sx={{
+                        textTransform: 'none',
+                        borderRadius: '1.5rem',
+                        background: theme.palette.background.default,
+                        fontWeight: smallScreen? theme.typography.fontWeightRegular:theme.typography.fontWeightBold,
+                        fontSize: theme.typography.pxToRem(15),
+                        margin: theme.spacing(2),
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        '&.Mui-selected': {
+                            color: '#fff',
+                        },
+                        '&.Mui-focusVisible': {
+                            backgroundColor: 'rgba(100, 95, 228, 0.32)',
+                        },
+                    }}
+
+                    onClick={handleSearch}
+                >
+                    Go
+                </Button>
+            </Box>
+
+            <PokeCard pokemon={pokeData} />
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="not-found"
+                aria-describedby="pokemon-not-found"
+            >
+                <DialogTitle id="pokemon-not-found" color={theme.palette.neutral.black}>
+                    {name} is not a pokemon.
+                </DialogTitle>
+                <DialogActions>
+                    <Button autoFocus onClick={handleClose}>Close</Button>
+                </DialogActions>
+            </Dialog>
 
         </Box>
     )

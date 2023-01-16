@@ -1,8 +1,14 @@
-import { Box, Card, CardMedia, CardContent, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import Image from "next/image";
+import styles from '../styles/Home.module.css';
 
-export default function PokeCard({pokemon}) {
+function titleCase(string) {
+    var sentence=string.toLowerCase();
+    return sentence=sentence[0].toUpperCase()+sentence.slice(1);
+}
+
+export default function PokeCard({ pokemon }) {
 
     const smallScreen=useMediaQuery('(max-width: 650px');
     const theme=useTheme();
@@ -14,6 +20,8 @@ export default function PokeCard({pokemon}) {
                 borderRadius: '0.5rem',
                 background: theme.palette.background.default,
                 marginRight: theme.spacing(1),
+                marginBottom: theme.spacing(5),
+                p: theme.spacing(5),
                 '&.Mui-focusVisible': {
                     backgroundColor: 'rgba(100, 95, 228, 0.32)',
                 },
@@ -25,92 +33,67 @@ export default function PokeCard({pokemon}) {
                 variant={smallScreen? "h4":"h3"}
                 fontWeight={"bold"}
                 sx={{
-                    mt: "5rem",
                     mb: "1rem",
                     color: theme.palette.text.primary
                 }}
             >
-                {pokemon.name}
+                {titleCase(pokemon.name)}
             </Typography>
 
             <Box
                 sx={{
                     display: 'flex',
-                    flexDirection: smallScreen? 'column':'row'
+                    flexDirection: smallScreen? 'column':'row',
                 }}
             >
-                {/* 
-                <Box>
-                     <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} alt="pokemon image" layout="fill" />
-                </Box> 
-                */}
 
-                <Box>
-                    <Typography
-                        textAlign={"center"}
-                    >
-                        {/* {about} */}
-                    </Typography>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: theme.palette.background.secondary,
+                    mr: smallScreen? 0:5,
+                    borderRadius: '1.5rem',
+                    p: 2,
+                    alignItems: 'center'
+                }}
+                >
+                    <Image src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.id}.png`} alt="pokemon image" width={250} height={250} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                        <Typography>
+                            HP<br />{pokemon.stats[0].base_stat}
+                        </Typography>
+                        <Typography>
+                            ATK.<br />{pokemon.stats[1].base_stat}
+                        </Typography>
+                        <Typography>
+                            DEF.<br />{pokemon.stats[2].base_stat}
+                        </Typography>
+                    </Box>
 
+                    <Button variant="contained" sx={{ borderRadius: '0.5rem', mt: 5 }}>{pokemon.types[0].type.name} Pokemon</Button>
+                </Box>
+
+                <Box className={styles.cardsList}>
+                    <Details title={"Abilities"}>{pokemon.abilities.map((ability, _) => ability.ability.name+', ')}</Details>
+                    <Details title={"Height"} >{pokemon.height} feet</Details>
+                    <Details title={"Types"} >{pokemon.types.map((type, _) => type.type.name+', ')}</Details>
+                    <Details title={"Weight"} >{pokemon.weight} pounds</Details>
                 </Box>
             </Box>
-
-            <Card
-                sx={{
-                    borderRadius: '1rem',
-                }}
-            >
-                <CardMedia src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`.src} alt="pokemon image" />
-                <CardContent>
-
-                </CardContent>
-            </Card>
 
         </Box>
 
     )
 }
 
-
-// import React from 'react'
-// import axios from 'axios'
-// import { makeStyles } from '@material-ui/core/styles'
-// import Card from '@material-ui/core/Card'
-// import CardMedia from '@material-ui/core/CardMedia'
-// import CardContent from '@material-ui/core/CardContent'
-// import Typography from '@material-ui/core/Typography'
-
-// const useStyles = makeStyles({
-//   card: {
-//     maxWidth: 345,
-//   },
-//   media: {
-//     height: 0,
-//     paddingTop: '56.25%', // 16:9
-//   },
-// })
-
-// const PokemonCard = ({ name, image, types, abilities }) => {
-//   const classes = useStyles()
-
-//   return (
-//     <Card className={classes.card}>
-//       <CardMedia
-//         className={classes.media}
-//         image={image}
-//         title={name}
-//       />
-//       <CardContent>
-//         <Typography gutterBottom variant="h5" component="h2">
-//           {name}
-//         </Typography>
-//         <Typography variant="body2" color="textSecondary" component="p">
-//           Types: {types.join(', ')}
-//         </Typography>
-//         <Typography variant="body2" color="textSecondary" component="p">
-//           Abilities: {abilities.join(', ')}
-//         </Typography>
-//       </CardContent>
-//     </Card>
-//   )
-// }
+function Details({ title, children }) {
+    const theme=useTheme();
+    return (
+        <Box>
+            <Typography variant={"h4"} sx={{ m: theme.spacing(2, 1, 2, 2) }}>{title}</Typography>
+            <Box sx={{ backgroundColor: theme.palette.background.secondary, borderRadius: '1.5rem', p: 1.5 }}>
+                {children}
+            </Box>
+        </Box>
+    );
+}
