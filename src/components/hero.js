@@ -26,7 +26,7 @@ export default function Hero() {
                         mt: "2rem",
                         mb: "1rem",
                         color: '#33C0F6',
-                        fontSize: smallScreen? 95:200,
+                        fontSize: smallScreen? 90:200,
                         WebkitTextStroke: '3px #33C0F6',
                     }}
                 >
