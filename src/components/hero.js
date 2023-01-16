@@ -52,7 +52,7 @@ export default function Hero() {
                 >
                     Know your pokemon with a monster encyclopedia in your pocket.
                 </Typography>
-                <Image src={banner} alt="pokemon banner" />
+                <Image src={banner} alt="pokemon banner" width={150}/>
             </Box>
         </Box>
     );
