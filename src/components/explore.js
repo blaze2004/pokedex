@@ -7,12 +7,6 @@ export default function Explore({ pokemon }) {
     const theme=useTheme();
     const smallScreen=useMediaQuery('(max-width: 650px');
 
-    console.log("App");
-    console.log(pokemon);
-
-    // axios.get(`https://pokeapi.co/api/v2/pokemon/${6}`)
-    //     .then((response) => console.log(response.data))
-
     // const pokemon={
     //     name: "Charmander",
     //     id: 4,
@@ -72,20 +66,8 @@ export default function Explore({ pokemon }) {
 
             {/* <Autocomplete /> */}
 
-            <PokeCard {...pokemon} />
+            <PokeCard pokemon={pokemon} />
 
         </Box>
     )
-}
-
-
-export async function getServerSideProps() {
-    const id=Math.floor(Math.random()*1010)+1;
-    const { data: pokemon }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${5}`);
-
-    return {
-        props: {
-            pokemon
-        }
-    };
 }

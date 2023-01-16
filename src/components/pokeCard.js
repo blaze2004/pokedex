@@ -2,27 +2,10 @@ import { Box, Card, CardMedia, CardContent, Typography, useMediaQuery } from "@m
 import { useTheme } from '@mui/material/styles';
 import Image from "next/image";
 
-export default function PokeCard(props) {
+export default function PokeCard({pokemon}) {
 
     const smallScreen=useMediaQuery('(max-width: 650px');
     const theme=useTheme();
-
-    const {
-        name,
-        id,
-        image,
-        hp,
-        attack,
-        genera,
-        about,
-        defense,
-        abilities,
-        weight,
-        height,
-        moves,
-        evoDetails,
-        type
-    }=props;
 
     return (
         <Box
@@ -47,7 +30,7 @@ export default function PokeCard(props) {
                     color: theme.palette.text.primary
                 }}
             >
-                {name}
+                {pokemon.name}
             </Typography>
 
             <Box
@@ -66,15 +49,21 @@ export default function PokeCard(props) {
                     <Typography
                         textAlign={"center"}
                     >
-                        {about}
+                        {/* {about} */}
                     </Typography>
 
                 </Box>
             </Box>
 
-            <Card>
-                <CardMedia src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} alt="pokemon image" />
-                <CardContent></CardContent>
+            <Card
+                sx={{
+                    borderRadius: '1rem',
+                }}
+            >
+                <CardMedia src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`.src} alt="pokemon image" />
+                <CardContent>
+
+                </CardContent>
             </Card>
 
         </Box>
