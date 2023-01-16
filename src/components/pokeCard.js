@@ -8,6 +8,11 @@ function titleCase(string) {
     return sentence=sentence[0].toUpperCase()+sentence.slice(1);
 }
 
+function get3D( num ) {
+    var n=num.toString().length;
+    return ( num.toString().length < 2 ? "00"+num : (num.toString().length < 3 ? "0"+num: num) ).toString();
+}
+
 export default function PokeCard({ pokemon }) {
 
     const smallScreen=useMediaQuery('(max-width: 650px');
@@ -57,7 +62,7 @@ export default function PokeCard({ pokemon }) {
                     alignItems: 'center'
                 }}
                 >
-                    <Image src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokemon.id}.png`} alt="pokemon image" width={250} height={250} />
+                    <Image src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${get3D(pokemon.id)}.png`} alt="pokemon image" width={250} height={250} />
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Typography>
                             HP<br />{pokemon.stats[0].base_stat}
