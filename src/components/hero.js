@@ -26,7 +26,7 @@ export default function Hero() {
                         mt: "2rem",
                         mb: "1rem",
                         color: '#33C0F6',
-                        fontSize: smallScreen? 100:200,
+                        fontSize: smallScreen? 90:200,
                         WebkitTextStroke: '3px #33C0F6',
                     }}
                 >
@@ -52,7 +52,7 @@ export default function Hero() {
                 >
                     Know your pokemon with a monster encyclopedia in your pocket.
                 </Typography>
-                <Image src={banner} alt="pokemon banner" />
+                <Image src={banner} alt="pokemon banner" width={smallScreen?150:300}/>
             </Box>
         </Box>
     );
