@@ -17,7 +17,7 @@ export default function Home({ pokemon }) {
 }
 
 export async function getServerSideProps() {
-  const id=Math.floor(Math.random()*1010)+1;
+  const id=Math.floor(Math.random()*1008)+1;
   const { data: pokemon }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
 
   return {

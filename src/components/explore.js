@@ -1,8 +1,9 @@
-import { Box, Button, Dialog, DialogActions, DialogTitle, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogTitle, TextField, Typography, useMediaQuery, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import axios from 'axios';
 import PokeCard from "./pokeCard";
+import { ArrowBackOutlined, ArrowForwardOutlined } from "@mui/icons-material";
 
 export default function Explore({ pokemon }) {
     const theme=useTheme();
@@ -12,9 +13,29 @@ export default function Explore({ pokemon }) {
     const [pokeData, setPokeData]=useState(pokemon);
 
     const handleSearch=async () => {
-        if (name === "")return
+        if (name==="") return
         try {
             const { data }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            setPokeData(data);
+            setName("");
+        } catch (error) {
+            handleClickOpen();
+        }
+    }
+
+    const handleNext=async () => {
+        try {
+            const { data }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeData.id+1}`);
+            setPokeData(data);
+            setName("");
+        } catch (error) {
+            handleClickOpen();
+        }
+    }
+
+    const handlePrev=async () => {
+        try {
+            const { data }=await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeData.id-1}`);
             setPokeData(data);
             setName("");
         } catch (error) {
@@ -36,41 +57,6 @@ export default function Explore({ pokemon }) {
         setOpen(false);
         setName("");
     };
-
-    // const pokemon={
-    //     name: "Charmander",
-    //     id: 4,
-    //     image: '',
-    //     hp: 5,
-    //     attack: 10,
-    //     genera: 'fire',
-    //     about: "It has a preference for hot things. When it rains, steam is said to spout from the tip of its tail.",
-    //     defense: '',
-    //     abilities: [
-    //         {
-    //             ability: {
-    //                 name: 'xyz'
-    //             }
-    //         }
-    //     ],
-    //     weight: 55,
-    //     height: 60,
-    //     moves: [],
-    //     evoDetails: [
-    //         {
-    //             id: 5,
-    //             name: 'charmeleon',
-    //             sprites: {
-    //                 other: {
-    //                     dream_world: {
-    //                         front_default: 'xyz'
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     ],
-    //     type: []
-    // };
 
     return (
         <Box
@@ -132,6 +118,49 @@ export default function Explore({ pokemon }) {
                 >
                     Go
                 </Button>
+            </Box>
+
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}
+            >
+                <IconButton sx={{
+                    textTransform: 'none',
+                    borderRadius: '1.5rem',
+                    background: theme.palette.background.default,
+                    fontWeight: theme.typography.fontWeightBold,
+                    fontSize: theme.typography.pxToRem(25),
+                    margin: theme.spacing(2),
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    '&.Mui-selected': {
+                        color: '#fff',
+                    },
+                    '&.Mui-focusVisible': {
+                        backgroundColor: 'rgba(100, 95, 228, 0.32)',
+                    },
+                }} disabled={pokeData.id===1? true:false} onClick={handlePrev}>
+                    <ArrowBackOutlined size="large" />
+                </IconButton>
+                <IconButton sx={{
+                    textTransform: 'none',
+                    borderRadius: '1.5rem',
+                    background: theme.palette.background.default,
+                    fontWeight: theme.typography.fontWeightBold,
+                    fontSize: theme.typography.pxToRem(25),
+                    margin: theme.spacing(2),
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    '&.Mui-selected': {
+                        color: '#fff',
+                    },
+                    '&.Mui-focusVisible': {
+                        backgroundColor: 'rgba(100, 95, 228, 0.32)',
+                    },
+                }} disabled={pokeData.id===1008? true:false} onClick={handleNext}>
+                    <ArrowForwardOutlined size="large" />
+                </IconButton>
             </Box>
 
             <PokeCard pokemon={pokeData} />
